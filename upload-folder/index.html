@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PROFILE GABUTZ</title>
+  <style>
+    :root {
+      --bg-color-light: #f2f2f2;
+      --bg-color-dark: #1e1e1e;
+      --text-color-light: #1e1e1e;
+      --text-color-dark: #f2f2f2;
+      --card-bg-light: #ffffff;
+      --card-bg-dark: #2c2c2c;
+      --spotify-green: #1db954;
+    }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  transition: all 0.6s ease-in-out;
+}
+
+    body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color-light);
+  color: var(--text-color-light);
+  overflow-x: hidden;
+  transition: background-color 0.6s ease, color 0.6s ease; /* Menambahkan transisi untuk background-color dan color */
+}
+
+.card, .about, .skills, .quote, .spotify-player, .weather, visitor-counter .weather-check {
+  transition: background 0.6s ease, color 0.6s ease, box-shadow 0.6s ease; /* Transisi untuk elemen lainnya */
+}
+
+.dark-mode {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-dark);
+}
+
+.dark-mode .card,
+.dark-mode .about,
+.dark-mode .skills,
+.dark-mode .quote,
+.dark-mode .spotify-player,
+.dark-mode .weather,
+.dark-mode . visitor-counter
+.dark-mode .weather-check {
+  background: var(--card-bg-dark);
+  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1); /* Menambahkan box-shadow yang halus */
+}
+
+#toggleBtn {
+  transition: background 0.6s ease, color 0.6s ease; /* Transisi untuk tombol toggle */
+}
+
+    .dark-mode {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    .card, .about, .skills, .quote, visitor-counter,  .spotify-player {
+      width: 90%;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 1.5rem;
+      background: var(--card-bg-light);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .dark-mode .card,
+    .dark-mode .about,
+    .dark-mode .skills,
+    .dark-mode .quote,
+    .dark-mode.visitor-counter,
+    .dark-mode .spotify-player {
+      background: var(--card-bg-dark);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+
+    .card h2, .about h3, .skills h3, .quote h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p, .about p, .quote p {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    .skills .skill {
+      margin: 12px 0;
+    }
+
+    .skills .bar {
+      background: #ccc;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .skills .bar span {
+      display: block;
+      height: 100%;
+      background-color: #1db954;
+    }
+
+    .spotify-player {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      background: #121212;
+      color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .spotify-player img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .spotify-player button {
+      background-color: var(--spotify-green);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .spotify-player button:hover {
+      transform: scale(1.2);
+    }
+
+    .progress {
+      width: 100%;
+      height: 6px;
+      background-color: #444;
+      border-radius: 3px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--spotify-green);
+      transition: width 0.2s ease-in-out;
+    }
+
+    #toggleBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 30px;
+      background: #333;
+      color: #fff;
+      z-index: 999;
+    }
+
+    #chatToggleBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 30px;
+      background: #333;
+      color: #fff;
+      z-index: 1000;
+    }
+
+    @keyframes fadeInUp {
+      0% { transform: translateY(50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Chat overlay animation */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    
+    .weather-check {
+      width: 90%;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 1.5rem;
+      background: var(--card-bg-light);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .dark-mode .weather-check {
+      background: var(--card-bg-dark);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .weather-check form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .weather-check input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .weather-check button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #1db954;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .weather-check button:hover {
+      background-color: #168f3e;
+    }
+    
+     .weather {
+      width: 90%;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 1.5rem;
+      background: var(--card-bg-light);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .dark-mode .weather {
+      background: var(--card-bg-dark);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+    }
+    
+    .quote {
+  width: 90%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 1rem;
+  background: var(--card-bg-light);
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+.dark-mode .quote {
+  background: var(--card-bg-dark);
+  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+}
+
+.quote p {
+  font-size: 1.1rem;
+  color: var(--text-color-light);
+  opacity: 0.85;
+}
+
+.dark-mode .quote p {
+  color: var(--text-color-dark);
+}
+
+.scroll-container {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start; /* Memastikan gambar pertama berada di kiri */
+  padding: 20px;
+  overflow-x: auto; /* Membuat kontainer bisa digeser */
+  scroll-snap-type: x mandatory; /* Mengaktifkan fitur snap saat menggulir */
+  width: 100%;
+}
+
+.card {
+  flex: 0 0 auto; /* Agar lebar card tetap dan tidak menyesuaikan dengan kontainer */
+  width: 100%; /* Membuat card mengisi seluruh lebar kontainer */
+  max-width: 500px; /* Mengatur lebar maksimal card */
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: background 0.6s ease, box-shadow 0.6s ease;
+  scroll-snap-align: start; /* Membuat setiap card berhenti di posisi yang tepat */
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-content h4 {
+  margin: 0;
+  font-size: 1.5rem; /* Ukuran teks */
+}
+
+.card-content p {
+  color: gray;
+}
+
+.image-container {
+  width: 100%; /* Membuat gambar memenuhi lebar card */
+  aspect-ratio: 9 / 16; /* Membuat gambar dengan rasio 9:16 */
+  overflow: hidden;
+  border-radius: 10px;
+  position: relative;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar terpotong sesuai proporsi */
+  display: block;
+}
+
+/* Memberikan ruang sedikit di kiri gambar pertama */
+.scroll-container .card:first-child {
+  margin-left: 20px; /* Memberikan margin kiri hanya pada gambar pertama */
+}
+
+/* Dark Mode Styling */
+.dark-mode .scroll-container {
+  background: var(--bg-color-dark); /* Background untuk dark mode */
+}
+
+.dark-mode .card {
+  background: var(--card-bg-dark); /* Background untuk card di dark mode */
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); /* Shadow terang di dark mode */
+}
+
+/* Mengubah warna teks saat di dark mode */
+.dark-mode .card-content h4, 
+.dark-mode .card-content p {
+  color: var(--text-color-dark); /* Ganti warna teks untuk dark mode */
+}
+
+.batagor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 9998;
+  justify-content: center;
+  align-items: center;
+}
+
+.batagor.show {
+  display: flex;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.batagor.hide {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cilok {
+  background: var(--card-bg-light);
+  color: var(--text-color-light);
+  padding: 25px;
+  border-radius: 20px;
+  width: 300px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: slideUp 0.4s ease forwards;
+  transition: background 0.3s, color 0.3s;
+}
+
+.dark-mode .cilok {
+  background: var(--card-bg-dark);
+  color: var(--text-color-dark);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+}
+
+.cilok:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.owner {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: inherit;
+  margin-bottom: 10px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 10px 0 20px;
+}
+
+.dark-mode hr {
+  border-top: 1px solid #444;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  border: 3px solid white;
+  box-shadow: 0 0 0 3px #00cc66;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.subtitle {
+  color: gray;
+  font-size: 0.95rem;
+  margin: 5px 0;
+}
+
+.desc {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.send-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--spotify-green);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #1e4ed8;
+}
+
+.toggle-batagor {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-size: 20px;
+  background-color: #2c62f6;
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+    
+.dark-mode .visitor-counter {
+  background-color: var(--card-bg-dark);
+  color: var(--text-color-dark);
+}
+
+.visitor-counter {
+  background-color: var(--card-bg-light);
+  color: var(--text-color-light);
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+<body>
+<div class="batagor" id="batagor" onclick="closeBatagor(event)">
+  <div class="card-wrapper" onclick="event.stopPropagation()">
+    
+    <div class="cilok">
+      <p class="owner">Owner from Herrscher of Human</p>
+      <hr>
+      <img src="https://files.catbox.moe/jj17e2.jpg" alt="Avatar" class="avatar">
+      <h3>Takanashi Xenz</h3>
+      <p class="subtitle">Hola, im Xenz</p>
+      <a href="https://wa.me/62895324070395" class="send-button" target="_blank">Send Message</a>
+    </div>
+
+    <div class="cilok">
+      <p class="owner">Nomer Bot Carlotta AI</p>
+      <hr>
+      <img src="https://files.catbox.moe/jj17e2.jpg" alt="Avatar" class="avatar">
+      <h3>Carlotta AI</h3>
+      <p class="subtitle">Dilarang Spam.</p>
+      <a href="https://wa.me/62895324070395" class="send-button" target="_blank">Send Message</a>
+    </div>
+
+  </div>
+</div>
+
+  <div class="toggle-batagor" onclick="toggleBatagor()">💬</div>
+  <div class="card">
+    <img src="https://files.catbox.moe/9p68ny.jpg" alt="Profile" />
+    <h2>Xenz</h2>
+    <p>Orang Dongo yg Pengen Jadi Progammer Handal</p>
+  </div>
+  
+<div class="about">
+  <h3>About Me</h3>
+  <p>Halo! gwe Xenz, nama asli gwe Dika tapi sering di panggil Xenz atau Dexzz. Hobi gwe banyak, tapi yang paling seru tuh baca buku novel sama komik. Gue gak terlalu jago coding, tapi bahasa pemrograman kesukaan gwe sih JavaScript. Kalau soal game, game favorit gwe tuh PGR, Wuwa, dan Blue Archive, yang sering gwe mainin pas lagi santai. Gwe juga suka banget ngelakuin project, walaupun seringkali ujung-ujungnya gak lanjut dan ketengah jalan. Tapi, ya, itu bagian serunya!</p>
+</div>
+
+  <div class="skills">
+    <h3>Skills</h3>
+    <div class="skill">
+      HTML
+      <div class="bar"><span style="width: 42%;"></span></div>
+    </div>
+    <div class="skill">
+      tidur
+      <div class="bar"><span style="width: 100%;"></span></div>
+    </div>
+    <div class="skill">
+      JavaScript
+      <div class="bar"><span style="width: 19%;"></span></div>
+    </div>
+    <div class="skill">
+      Game
+      <div class="bar"><span style="width: 100%;"></span></div>
+    </div>
+  </div>
+
+<div class="quote">
+  <h3>Quote</h3>
+  <p id="random-quote"></p>
+</div>
+
+  <div class="spotify-player">
+    <img src="https://files.catbox.moe/cyeh4a.jpg" alt="Cover" />
+    <div>
+      <div style="font-size: 12px; font-weight: bold;">Jeremy Zucker</div>
+      <div style="font-size: 10px; color: #ccc;">all the kids are depressed</div>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+    <button id="rewind">⏮️</button>
+<button id="playPause">▶</button>
+<button id="forward">⏭️</button>
+    <audio id="audio" src="https://files.catbox.moe/cqp8bp.mp3" loop></audio>
+  </div>
+  
+  <div class="weather">
+  <h3>Cuaca di Bogor</h3>
+  <p id="weather">Loading cuaca...</p>
+</div>
+
+<div class="weather-check">
+  <h3>Cek Cuaca Kota Kamu!</h3>
+  <form id="weatherForm">
+    <input type="text" id="cityInput" placeholder="Masukkan nama kota..." required />
+    <button type="submit">Cek Cuaca</button>
+  </form>
+  <p id="weatherResult"></p>
+</div>
+
+ <button id="toggleBtn">🌙</button>
+
+<div class="scroll-container">
+  <div class="card">
+    <div class="card-content">
+      <h4>Takanashi Hoshino</h4>
+      <p>My Istri.</p>
+    </div>
+    <div class="image-container">
+      <img src="https://files.catbox.moe/8hkahk.jpg" alt="Takanashi Hoshino" />
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-content">
+      <h4>Kobayashi Tohru</h4>
+      <p>My Istru ke2.</p>
+    </div>
+    <div class="image-container">
+      <img src="https://files.catbox.moe/mv1n83.jpg" alt="Gambar 2" />
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-content">
+      <h4>Carlotta</h4>
+      <p>My Istri ke3.</p>
+    </div>
+    <div class="image-container">
+      <img src="https://files.catbox.moe/y1dmg4.jpg" alt="Gambar 3" />
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-content">
+      <h4>Nanami</h4>
+      <p>My Istri ke4.</p>
+    </div>
+    <div class="image-container">
+      <img src="https://files.catbox.moe/cd3k32.jpg" alt="Gambar 4" />
+    </div>
+  </div>
+</div>
+<div class="visitor-counter" style="
+  position: fixed;
+  bottom: 70px;
+  left: 20px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10000;
+  font-weight: 500;
+">
+  Total Pengunjung: <span id="visitor-count">0</span>
+</div>
+
+  <script>
+  
+  const toggleBtn = document.getElementById("toggleBtn");
+  const body = document.body;
+
+  toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("dark-mode");
+    toggleBtn.innerText = body.classList.contains("dark-mode") ? "🌞" : "🌙";
+  });
+
+
+  const audio = document.getElementById('audio');
+  const playPauseBtn = document.getElementById('playPause');
+  const progressBar = document.getElementById('progressBar');
+
+  playPauseBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      playPauseBtn.textContent = '⏸';
+    } else {
+      audio.pause();
+      playPauseBtn.textContent = '▶';
+    }
+    document.getElementById('rewind').addEventListener('click', () => {
+  audio.currentTime = Math.max(0, audio.currentTime - 10);
+});
+
+document.getElementById('forward').addEventListener('click', () => {
+  audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+});
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    const percent = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = percent + '%';
+  });
+
+  fetch("https://api.openweathermap.org/data/2.5/weather?q=bogor&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&lang=id")
+    .then(response => response.json())
+    .then(data => {
+      const weather = data.weather[0].description;
+      const temp = data.main.temp;
+      const feels = data.main.feels_like;
+      const humidity = data.main.humidity;
+      const wind = data.wind.speed;
+      const location = `${data.name}, ${data.sys.country}`;
+
+      document.getElementById('weather').innerHTML =
+        `<strong>${location}</strong><br>
+        Cuaca: ${weather}<br>
+        Suhu: ${temp}°C (Terasa: ${feels}°C)<br>
+        Kelembapan: ${humidity}%<br>
+        Angin: ${wind} m/s`;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('weather').textContent = "yah error aowkwowk.";
+    });
+    
+    document.getElementById('weatherForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const city = document.getElementById('cityInput').value.trim();
+  const apiKey = '060a6bcfa19809c2cd4d97a212b19273';
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=id`;
+
+  document.getElementById('weatherResult').textContent = 'Loading...';
+
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error('Kotanya gk ada bg');
+      return res.json();
+    })
+    .then(data => {
+      const weather = data.weather[0].description;
+      const temp = data.main.temp;
+      const feels = data.main.feels_like;
+      const humidity = data.main.humidity;
+      const wind = data.wind.speed;
+      const location = `${data.name}, ${data.sys.country}`;
+
+      document.getElementById('weatherResult').innerHTML = 
+        `<strong>${location}</strong><br>
+        Cuaca: ${weather}<br>
+        Suhu: ${temp}°C (Terasa: ${feels}°C)<br>
+        Kelembapan: ${humidity}%<br>
+        Angin: ${wind} m/s`;
+    })
+    .catch(err => {
+      document.getElementById('weatherResult').textContent = 'error bjir aowkwowk.';
+      console.error(err);
+    });
+});
+
+const quotes = [
+  '"Satu-satunya cara untuk melakukan pekerjaan hebat adalah dengan mencintai apa yang kamu kerjakan."',
+  '"Percayalah pada dirimu sendiri dan kamu sudah setengah jalan."',
+  '"Kesuksesan bukanlah akhir, kegagalan bukanlah fatal: Yang terpenting adalah keberanian untuk terus melangkah."',
+  '"Di tengah setiap kesulitan terdapat peluang."',
+  '"Cara terbaik untuk meramalkan masa depan adalah dengan menciptakannya."',
+  '"Lakukan apa yang kamu bisa, dengan apa yang kamu punya, di tempat kamu berada."',
+  '"Tidak masalah seberapa lambat kamu berjalan, yang penting jangan berhenti."',
+  '"Kesuksesan bukan seberapa tinggi kamu mendaki, tapi seberapa besar perbedaan positif yang kamu buat di dunia."',
+  '"Segalanya tampak mustahil hingga akhirnya selesai."',
+  '"Pembatasanmu—itu hanya imajinasimu."',
+  '"Kita bisa melakukan hal-hal yang luar biasa jika kita tidak berhenti mencoba."',
+  '"Berfokus pada apa yang bisa kita ubah, bukan apa yang tidak bisa kita ubah."',
+  '"Hidup adalah tentang menghadapi tantangan, bukan menghindarinya."',
+  '"Jangan menunggu waktu yang sempurna, buatlah waktu tersebut sempurna."',
+  '"Keberanian bukanlah ketiadaan rasa takut, tetapi kemampuan untuk menghadapinya."',
+  '"Jangan biarkan kegagalan menghalangi jalan menuju keberhasilanmu."',
+  '"Hidup yang indah dimulai dengan langkah pertama yang berani."',
+  '"Kesuksesan sejati datang ketika kita memberikan yang terbaik untuk orang lain."',
+  '"Jika kamu bisa memimpikannya, kamu bisa mewujudkannya."',
+  '"Hidup bukan tentang menemukan diri kita, tetapi tentang menciptakan diri kita."',
+  '"Peluang tidak datang dengan pemberitahuan, ambillah kesempatan yang ada di depanmu."'
+];
+
+const randomQuoteElement = document.getElementById("random-quote");
+
+function getRandomQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex];
+}
+
+window.onload = function() {
+  randomQuoteElement.textContent = getRandomQuote();
+};
+
+</script>
+ <script>
+    function toggleBatagor() {
+      const el = document.getElementById('batagor')
+      el.classList.toggle('show')
+    }
+
+    function closeBatagor(e) {
+      const el = document.getElementById('batagor')
+      el.classList.remove('show')
+    }
+
+    function toggleGehu() {
+      const el = document.getElementById('gehu-store')
+      if (el.classList.contains('show')) {
+        el.classList.remove('show')
+        el.classList.add('hide')
+        setTimeout(() => {
+          el.classList.remove('hide')
+          el.style.display = 'none'
+        }, 400)
+      } else {
+        el.style.display = 'flex'
+        setTimeout(() => {
+          el.classList.add('show')
+        }, 10)
+      }
+    }
+
+    function closeGehu(e) {
+      const el = document.getElementById('gehu-store')
+      el.classList.remove('show')
+    }
+  </script>
+  
+  <script>
+  const visitorKey = 'sunda-ui-visitor-count';
+  let count = localStorage.getItem(visitorKey);
+
+  if (!count) {
+    count = 1;
+    localStorage.setItem(visitorKey, count);
+  } else {
+    count = parseInt(count) + 1;
+    localStorage.setItem(visitorKey, count);
+  }
+
+  document.getElementById('visitor-count').innerText = count;
+</script>
+
+</body>
+</html>
